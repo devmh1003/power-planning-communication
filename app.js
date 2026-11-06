@@ -56,13 +56,8 @@ for (const [field, value] of Object.entries(config.event)) {
   if (node) node.textContent = value;
 }
 
-if (demo || !configured) {
-  const setup = document.querySelector("#setup");
-  setup.textContent = demo
-    ? "미리보기입니다. 가상의 이름과 사번으로 시험해 주세요. 편지는 새로고침하면 사라집니다."
-    : unavailable;
-  setup.hidden = false;
-  submit.disabled = !demo;
+if (!configured && !demo) {
+  submit.disabled = true;
 }
 
 async function api(path, options = {}, token, base = "/rest/v1/") {
