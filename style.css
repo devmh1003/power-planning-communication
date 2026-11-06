@@ -203,3 +203,8 @@ footer { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wr
 #reset-results form { max-width: 390px; }
 
 #reset-status:not(:empty) { padding: 10px 13px; background: #eee8df; }
+
+.gratitude-copy h1 { font-size: clamp(2.15rem, 4.3vw, 4.2rem); }
+@media (max-width: 760px) {
+  .gratitude-copy h1 { font-size: clamp(2rem, 7.6vw, 3.5rem); }
+}
