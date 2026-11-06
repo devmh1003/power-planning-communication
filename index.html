@@ -3,26 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="전력사업기획실 소통행사 안내와 마음의 편지 공개 게시판">
+<meta name="description" content="전력사업기획실 소통행사 안내와 두 사람에게 전하는 투표">
 <title>전력사업기획실 iCON</title>
-<link rel="stylesheet" href="style.css?v=icon-letter-grid">
+<link rel="stylesheet" href="style.css?v=icon-vote">
 <script defer src="config.js?v=20261106-connected"></script>
-<script defer src="app.js?v=icon-no-setup"></script>
+<script defer src="vote.js?v=1"></script>
 </head>
 <body>
 <header><div class="wrap bar">
 <a class="brand" href="#home"><span>전력사업기획실</span> <strong>iCON</strong></a>
-<nav aria-label="주 메뉴"><a href="#home">행사 안내</a><a href="#write">마음의 편지</a><a href="#board">공개 게시판</a></nav>
+<nav aria-label="주 메뉴"><a href="#home">행사 안내</a><a href="#vote">투표 참여</a></nav>
 </div></header>
 <main class="wrap">
 <section id="home" data-page>
 <div class="hero">
 <div class="hero-copy">
 <div class="eyebrow"><span></span> iCON 2026 <i></i> COMMUNICATION DAY</div>
-<h1 tabindex="-1">함께 나누는<br><em>마음 한 줄</em></h1>
-<p>고마웠던 순간과 응원하고 싶은 마음을<br class="desktop"> 한 장의 편지에 담아 보세요.</p>
-<div class="hero-actions"><a class="button" href="#write">마음의 편지 쓰기 <span aria-hidden="true">↗</span></a>
-<a class="hero-link" href="#board">공개 게시판 <span aria-hidden="true">→</span></a></div>
+<h1 tabindex="-1">마음을 전할<br><em>두 사람</em></h1>
+<p>마음을 전하고 싶은 두 사람을 골라<br class="desktop"> 한마디씩 남겨 주세요.</p>
+<div class="hero-actions"><a class="button" href="#vote">투표 참여하기 <span aria-hidden="true">↗</span></a></div>
 </div>
 <figure class="artwork">
 <svg viewBox="0 0 640 540" aria-hidden="true" focusable="false">
@@ -45,53 +44,45 @@
 <dl><div><dt>일시</dt><dd id="event-date"></dd></div><div><dt>장소</dt><dd><span id="event-place"></span><span class="venue-address">서울 용산구 이태원로55길 60-16</span><a class="map-link" href="https://www.leeumhoam.org/leeum/info/visit?eleId=sub-cont01" target="_blank" rel="noopener noreferrer">공식 지도·오시는 길 <span aria-hidden="true">↗</span></a></dd></div><div><dt>참여 대상</dt><dd id="event-audience"></dd></div></dl>
 </article>
 </section>
-<section id="write" class="panel narrow" data-page hidden>
-<div class="kicker">WRITE A LETTER</div><h1 tabindex="-1">마음의 편지</h1>
-<p>편지를 받을 동료와 전하고 싶은 마음을 적어 주세요.</p>
-<form id="letter-form">
-<div class="fields"><label>사번<input id="employee" type="text" required minlength="5" maxlength="5" pattern="[A-Za-z][0-9]{4}" placeholder="예: A1234" title="영문자 1자와 숫자 4자를 입력해 주세요. 예: A1234" autocomplete="off" autocapitalize="characters" spellcheck="false"></label>
-<label>보내는 사람 이름<input name="sender" required maxlength="40" placeholder="이름을 입력해 주세요" autocomplete="off"></label></div>
-<label>받는 사람 이름<input name="recipient" required maxlength="40" placeholder="편지를 받을 동료의 이름" autocomplete="off"></label>
-<label>제목<input name="title" required maxlength="80" placeholder="마음을 담은 한 줄" autocomplete="off"></label>
-<label>편지 내용<textarea name="body" required maxlength="2000" rows="7" placeholder="고마웠던 순간이나 응원의 말을 전해 보세요."></textarea></label>
-<label class="check"><input type="checkbox" required> 인터넷 공개 범위를 확인했습니다.</label>
-<button class="button" type="submit">공개 게시판에 올리기 <span aria-hidden="true">→</span></button>
-<p class="status" id="write-status" role="status"></p>
-</form>
-</section>
-<section id="board" data-page hidden>
-<div class="panel board-top"><div class="kicker">LETTER BOARD</div><h1 tabindex="-1">공개 게시판</h1><p>동료에게 전한 마음의 편지를 최신순으로 읽을 수 있습니다. 내가 쓴 편지는 작성한 브라우저에서 수정하거나 삭제할 수 있습니다.</p><a class="button" href="#write">편지 쓰기 <span aria-hidden="true">→</span></a></div>
-<p id="board-status" class="status" role="status"></p>
-<div id="letters" class="letters"></div>
-<div class="board-pagination" role="group" aria-label="공개 게시판 페이지">
-<button id="previous" class="secondary" hidden>← 최신 편지</button>
-<span id="board-page" hidden></span>
-<button id="more" class="secondary" hidden>이전 편지 →</button>
+<section id="vote" class="panel narrow" data-page hidden>
+<div class="kicker">iCON BALLOT</div><h1 tabindex="-1">두 사람에게 한마디</h1>
+<form id="entry-form">
+<p>사번과 이름을 입력해 투표를 시작해 주세요.</p>
+<div class="fields">
+<label>사번<input name="employee" required minlength="5" maxlength="5" pattern="[A-Za-z][0-9]{4}" placeholder="예: A1234" autocomplete="off" autocapitalize="characters" spellcheck="false"></label>
+<label>이름<input name="voter" required maxlength="20" autocomplete="off" placeholder="예: 홍길동"></label>
 </div>
+<button class="button">투표 시작하기 <span aria-hidden="true">→</span></button>
+</form>
+<form id="ballot-form" hidden>
+<p>서로 다른 두 사람을 선택하고, 각 사람에게 전할 한마디를 적어 주세요.</p>
+<fieldset><legend>첫 번째 선택</legend>
+<label>받는 사람<select name="first" required></select></label>
+<label>한마디<textarea name="firstNote" maxlength="100" rows="3" required placeholder="100자 이내"></textarea></label>
+</fieldset>
+<fieldset><legend>두 번째 선택</legend>
+<label>받는 사람<select name="second" required></select></label>
+<label>한마디<textarea name="secondNote" maxlength="100" rows="3" required placeholder="100자 이내"></textarea></label>
+</fieldset>
+<p class="ballot-hint">사번당 한 번 참여할 수 있으며, 투표와 한마디는 운영 관리자만 확인합니다.</p>
+<div class="card-actions"><button class="button">투표 제출</button><button id="back-to-entry" type="button" class="secondary">이전</button></div>
+</form>
+<p class="status" id="vote-status" role="status"></p>
 </section>
 <section id="admin" class="panel narrow" data-page hidden>
-<div class="kicker">PRIVATE ACCESS</div><h1 tabindex="-1">관리자 모드</h1>
-<p>관리자 계정으로 로그인하면 전체 편지와 작성자 이름을 확인하고 수정하거나 삭제할 수 있습니다.</p>
+<div class="kicker">PRIVATE ACCESS</div><h1 tabindex="-1">투표 관리</h1>
 <form id="admin-form">
 <label>관리자 이메일<input name="email" type="email" autocomplete="username" required></label>
 <label>비밀번호<input name="password" type="password" autocomplete="current-password" required></label>
 <button class="button">관리자 로그인</button>
 </form>
+<div class="card-actions">
+<button id="refresh-results" class="secondary" hidden>결과 새로고침</button>
 <button id="sign-out" class="secondary" hidden>로그아웃</button>
+</div>
 <p class="status" id="admin-status" role="status"></p>
-<div id="admin-letters" class="letters"></div>
-<button id="admin-more" class="secondary" hidden>이전 편지 더 보기</button>
+<div id="vote-results"></div>
 </section>
-<dialog id="edit-dialog" aria-labelledby="edit-title">
-<form id="edit-form">
-<div class="kicker">EDIT A LETTER</div><h2 id="edit-title">편지 수정</h2>
-<label>받는 사람 이름<input name="recipient" required maxlength="40"></label>
-<label>제목<input name="title" required maxlength="80"></label>
-<label>편지 내용<textarea name="body" rows="6" required maxlength="2000"></textarea></label>
-<div class="card-actions"><button class="button">변경 저장</button><button id="edit-cancel" class="secondary" type="button">취소</button></div>
-<p class="status" id="edit-status" role="status"></p>
-</form>
-</dialog>
 </main>
 <footer class="wrap"><span>전력사업기획실 <strong>iCON</strong></span><span class="footer-edition">COMMUNICATION DAY 2026 <b>·</b> <a href="#admin">관리자 모드</a></span></footer>
 </body>

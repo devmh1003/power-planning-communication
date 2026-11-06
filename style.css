@@ -160,3 +160,26 @@ footer { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wr
 #board-page { color: var(--muted); font-size: .85rem; }
 @media (max-width: 760px) { #board .letters { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 510px) { #board .letters { grid-template-columns: 1fr; } }
+
+#vote fieldset {
+  margin: 20px 0;
+  padding: 8px 17px 13px;
+  min-width: 0;
+  border: 1px solid var(--line);
+}
+#vote legend { padding-inline: 6px; color: var(--accent); font-weight: 800; }
+#vote select {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  padding: 11px 12px;
+  border: 1px solid #bfb4c3;
+  background: white;
+  color: var(--ink);
+  font: inherit;
+}
+.ballot-hint { color: var(--muted); font-size: .9rem; }
+#vote-status:not(:empty), #admin-status:not(:empty) { padding: 10px 13px; background: #eee8f2; }
+#vote-results details { margin-block: 9px; padding: 12px; border: 1px solid var(--line); }
+#vote-results summary { cursor: pointer; font-weight: 750; }
+#vote-results li { overflow-wrap: anywhere; white-space: pre-wrap; }
