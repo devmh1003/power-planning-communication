@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="전력사업기획실 소통행사 안내와 두 사람에게 전하는 투표">
 <title>전력사업기획실 iCON</title>
-<link rel="stylesheet" href="style.css?v=icon-vote-admin">
+<link rel="stylesheet" href="style.css?v=icon-year-end">
 <script defer src="config.js?v=20261106-connected"></script>
-<script defer src="vote.js?v=2"></script>
+<script defer src="vote.js?v=3"></script>
 </head>
 <body>
 <header><div class="wrap bar">
@@ -18,25 +18,33 @@
 <section id="home" data-page>
 <div class="hero">
 <div class="hero-copy">
-<div class="eyebrow"><span></span> iCON 2026 <i></i> COMMUNICATION DAY</div>
-<h1 tabindex="-1">마음을 전할<br><em>두 사람</em></h1>
-<p>마음을 전하고 싶은 두 사람을 골라<br class="desktop"> 한마디씩 남겨 주세요.</p>
+<div class="eyebrow"><span></span> 2026 iCON <i></i> YEAR-END EDITION</div>
+<h1 tabindex="-1">올해의 소통,<br><em>한 줄로</em></h1>
+<p>올해 함께한 동료 중 두 명을 선택하고<br class="desktop"> 짧은 메시지를 남겨 주세요.</p>
 <div class="hero-actions"><a class="button" href="#vote">투표 참여하기 <span aria-hidden="true">↗</span></a></div>
 </div>
 <figure class="artwork">
 <svg viewBox="0 0 640 540" aria-hidden="true" focusable="false">
-<defs><pattern id="grain" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="2" cy="3" r=".65" fill="#ffffff" opacity=".19"/><circle cx="8" cy="9" r=".55" fill="#211439" opacity=".18"/></pattern></defs>
-<rect width="640" height="540" fill="#2c2240"/>
-<path d="M0 0h306C227 104 166 160 0 187Z" fill="#ee6b47"/>
-<circle cx="412" cy="215" r="171" fill="#ddd1ee"/>
-<path d="M237 540V360c0-101 83-184 185-184h218v364Z" fill="#eeae79"/>
-<path d="M343 540V363c0-44 36-80 80-80h217v257Z" fill="#583b76"/>
-<path d="M0 418c107-18 195-99 228-201v323H0Z" fill="#a4a88a"/>
-<path d="M52 540V320c109 0 170 56 170 150v70Z" fill="#ded7c3"/>
-<path d="M426 198h214M426 222h214M426 246h214" stroke="#2c2240" stroke-width="1" opacity=".3"/>
-<rect width="640" height="540" fill="url(#grain)"/>
+<defs><pattern id="winter-grain" width="11" height="11" patternUnits="userSpaceOnUse"><circle cx="2" cy="4" r=".55" fill="#f5e9cd" opacity=".18"/></pattern></defs>
+<rect width="640" height="540" fill="#242c36"/>
+<rect x="27" y="27" width="586" height="486" fill="none" stroke="#a68d67" opacity=".55"/>
+<path d="M28 414C165 370 420 472 612 401V512H28Z" fill="#333b44"/>
+<g stroke="#d8c09a" fill="none" stroke-width="1.5">
+<path d="M107 105v36m-18-18h36M528 95v26m-13-13h26M504 356v34m-17-17h34M135 365v20m-10-10h20"/>
+<circle cx="147" cy="158" r="2"/><circle cx="470" cy="129" r="2"/><circle cx="549" cy="267" r="2"/><circle cx="93" cy="290" r="2"/>
+</g>
+<g transform="rotate(8 329 270)">
+<rect x="223" y="154" width="230" height="239" rx="2" fill="#603c44" stroke="#a78673"/>
+</g>
+<g transform="rotate(-9 310 265)">
+<rect x="183" y="143" width="244" height="244" rx="2" fill="#eee3ce" stroke="#a68d67"/>
+<rect x="196" y="156" width="218" height="218" fill="none" stroke="#aa9370"/>
+<path d="M251 226h108m-108 73h108m-91 20h74" stroke="#a68d67"/>
+<text x="305" y="277" fill="#593841" text-anchor="middle" font-family="Georgia, serif" font-size="43">iCON</text>
+</g>
+<rect width="640" height="540" fill="url(#winter-grain)"/>
 </svg>
-<figcaption><span>FIG. 01 <i></i> 마음이 머무는 자리</span><span>11.12 / SEOUL</span></figcaption>
+<figcaption><span>iCON 2026 <i></i> 연말 소통행사</span><span>11.12 / SEOUL</span></figcaption>
 </figure>
 </div>
 <article class="panel event"><div class="kicker">01 <span></span> EVENT DETAILS</div><h2>소통행사 안내</h2>
@@ -87,6 +95,14 @@
 <p>투표 한 건에는 두 사람에 대한 선택과 한마디가 들어 있습니다.</p>
 <p id="ballot-management-status" class="status" role="status"></p>
 <div id="admin-ballots"></div>
+<details id="reset-results">
+<summary>전체 결과 초기화</summary>
+<p>모든 투표와 한마디가 삭제되며 복구할 수 없습니다. 모든 사번은 다시 투표할 수 있습니다.</p>
+<form id="reset-results-form">
+<label>확인 문구<input name="confirmation" required autocomplete="off" placeholder="결과 초기화"></label>
+<button class="secondary">전체 결과 초기화 실행</button>
+</form>
+</details>
 </section>
 </section>
 </main>

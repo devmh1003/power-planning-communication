@@ -188,3 +188,16 @@ footer { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wr
 #admin-ballots details { margin-block: 9px; padding: 12px; border: 1px solid var(--line); }
 #admin-ballots summary { cursor: pointer; font-weight: 750; }
 #admin-ballots select { display: block; width: 100%; margin-top: 6px; padding: 8px; font: inherit; }
+
+/* iCON year-end edition */
+:root { --ink: #252c33; --muted: #575b60; --paper: #f4f1e9; --white: #fcfaf4; --line: #d9d2c4; --accent: #69434c; }
+.hero { gap: clamp(25px, 5vw, 69px); }
+.hero h1 em { color: #69434c; }
+.eyebrow span { background: #96774e; }
+.artwork svg { box-shadow: 0 13px 27px #242c361a; }
+.event { border-top-color: #303943; }
+.secondary, .ballot-hint, #vote-status:not(:empty), #admin-status:not(:empty) { background-color: #eee8df; }
+.ballot-hint { padding: 9px 12px; }
+#reset-results { margin-top: 28px; padding: 16px; border: 1px solid #b79c95; background: #f7eeea; }
+#reset-results summary { color: var(--accent); cursor: pointer; font-weight: 800; }
+#reset-results form { max-width: 390px; }

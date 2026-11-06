@@ -10,6 +10,8 @@ const results = document.querySelector("#vote-results");
 const management = document.querySelector("#ballot-management");
 const managementStatus = document.querySelector("#ballot-management-status");
 const adminBallots = document.querySelector("#admin-ballots");
+const resetDetails = document.querySelector("#reset-results");
+const resetForm = document.querySelector("#reset-results-form");
 const signOut = document.querySelector("#sign-out");
 const refresh = document.querySelector("#refresh-results");
 const first = ballot.elements.first;
@@ -145,6 +147,8 @@ function clearAdmin(message) {
   refresh.hidden = signOut.hidden = true;
   results.replaceChildren();
   management.hidden = true;
+  resetDetails.open = false;
+  resetForm.reset();
   adminBallots.replaceChildren();
   managementStatus.textContent = "";
   adminStatus.textContent = message;
@@ -263,6 +267,31 @@ function ballotEditor(record, candidates) {
   });
   return group;
 }
+
+resetForm.addEventListener("submit", async event => {
+  event.preventDefault();
+  const token = adminToken;
+  const confirmation = resetForm.elements.confirmation.value;
+  if (!token) return;
+  if (confirmation !== "결과 초기화") {
+    managementStatus.textContent = "확인 문구에 ‘결과 초기화’를 입력해 주세요.";
+    return;
+  }
+  const button = resetForm.querySelector("button");
+  button.disabled = refresh.disabled = true;
+  try {
+    const removed = await rpc("admin_icon_vote_reset", { p_confirmation: confirmation }, token);
+    if (token !== adminToken) return;
+    resetForm.reset();
+    resetDetails.open = false;
+    managementStatus.textContent = "초기화했습니다. 삭제된 투표 " + removed + "건.";
+    await loadResults();
+  } catch {
+    if (token === adminToken) managementStatus.textContent = "초기화 결과를 확인하지 못했습니다. 새로고침해 확인해 주세요.";
+  } finally {
+    button.disabled = refresh.disabled = false;
+  }
+});
 
 adminForm.addEventListener("submit", async event => {
   event.preventDefault();
