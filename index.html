@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="전력사업기획실 소통행사 안내와 두 사람에게 전하는 투표">
 <title>전력사업기획실 iCON</title>
-<link rel="stylesheet" href="style.css?v=icon-year-end">
+<link rel="stylesheet" href="style.css?v=icon-reset-feedback">
 <script defer src="config.js?v=20261106-connected"></script>
-<script defer src="vote.js?v=3"></script>
+<script defer src="vote.js?v=4"></script>
 </head>
 <body>
 <header><div class="wrap bar">
@@ -89,13 +89,7 @@
 <button id="sign-out" class="secondary" hidden>로그아웃</button>
 </div>
 <p class="status" id="admin-status" role="status"></p>
-<div id="vote-results"></div>
-<section id="ballot-management" hidden aria-labelledby="ballot-management-title">
-<h2 id="ballot-management-title">제출된 투표 관리</h2>
-<p>투표 한 건에는 두 사람에 대한 선택과 한마디가 들어 있습니다.</p>
-<p id="ballot-management-status" class="status" role="status"></p>
-<div id="admin-ballots"></div>
-<details id="reset-results">
+<details id="reset-results" hidden>
 <summary>전체 결과 초기화</summary>
 <p>모든 투표와 한마디가 삭제되며 복구할 수 없습니다. 모든 사번은 다시 투표할 수 있습니다.</p>
 <form id="reset-results-form">
@@ -103,6 +97,14 @@
 <button class="secondary">전체 결과 초기화 실행</button>
 </form>
 </details>
+<p id="reset-status" class="status" role="status" tabindex="-1"></p>
+<div id="vote-results"></div>
+<section id="ballot-management" hidden aria-labelledby="ballot-management-title">
+<h2 id="ballot-management-title">제출된 투표 관리</h2>
+<p>투표 한 건에는 두 사람에 대한 선택과 한마디가 들어 있습니다.</p>
+<p id="ballot-management-status" class="status" role="status"></p>
+<div id="admin-ballots"></div>
+
 </section>
 </section>
 </main>

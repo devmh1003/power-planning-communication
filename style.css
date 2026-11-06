@@ -201,3 +201,5 @@ footer { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wr
 #reset-results { margin-top: 28px; padding: 16px; border: 1px solid #b79c95; background: #f7eeea; }
 #reset-results summary { color: var(--accent); cursor: pointer; font-weight: 800; }
 #reset-results form { max-width: 390px; }
+
+#reset-status:not(:empty) { padding: 10px 13px; background: #eee8df; }

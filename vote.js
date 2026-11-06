@@ -12,6 +12,7 @@ const managementStatus = document.querySelector("#ballot-management-status");
 const adminBallots = document.querySelector("#admin-ballots");
 const resetDetails = document.querySelector("#reset-results");
 const resetForm = document.querySelector("#reset-results-form");
+const resetStatus = document.querySelector("#reset-status");
 const signOut = document.querySelector("#sign-out");
 const refresh = document.querySelector("#refresh-results");
 const first = ballot.elements.first;
@@ -50,7 +51,10 @@ async function api(path, body, token) {
     body: JSON.stringify(body),
     signal: AbortSignal.timeout(12000)
   });
-  if (!response.ok) throw new Error("Request failed");
+  if (!response.ok) {
+    const detail = await response.json().catch(() => null);
+    throw Object.assign(new Error("Request failed"), { status: response.status, code: detail?.code });
+  }
   return response.json();
 }
 
@@ -147,8 +151,10 @@ function clearAdmin(message) {
   refresh.hidden = signOut.hidden = true;
   results.replaceChildren();
   management.hidden = true;
+  resetDetails.hidden = true;
   resetDetails.open = false;
   resetForm.reset();
+  resetStatus.textContent = "";
   adminBallots.replaceChildren();
   managementStatus.textContent = "";
   adminStatus.textContent = message;
@@ -190,6 +196,7 @@ async function loadResults() {
     adminBallots.replaceChildren(...ballots.map(ballot => ballotEditor(ballot, rows)));
     if (!ballots.length) adminBallots.textContent = "아직 제출된 투표가 없습니다.";
     management.hidden = false;
+    resetDetails.hidden = false;
   } catch {
     if (token === adminToken) clearAdmin("관리 권한을 확인할 수 없습니다. 다시 로그인해 주세요.");
   } finally {
@@ -271,23 +278,31 @@ function ballotEditor(record, candidates) {
 resetForm.addEventListener("submit", async event => {
   event.preventDefault();
   const token = adminToken;
-  const confirmation = resetForm.elements.confirmation.value;
-  if (!token) return;
+  const confirmation = resetForm.elements.confirmation.value.trim().replace(/\s+/g, " ");
+  const button = resetForm.querySelector("button");
+  if (!token || button.disabled) return;
   if (confirmation !== "결과 초기화") {
-    managementStatus.textContent = "확인 문구에 ‘결과 초기화’를 입력해 주세요.";
+    resetStatus.textContent = "확인 문구에 ‘결과 초기화’를 입력해 주세요.";
+    resetForm.elements.confirmation.focus();
     return;
   }
-  const button = resetForm.querySelector("button");
   button.disabled = refresh.disabled = true;
+  resetStatus.textContent = "초기화 중입니다.";
   try {
     const removed = await rpc("admin_icon_vote_reset", { p_confirmation: confirmation }, token);
     if (token !== adminToken) return;
     resetForm.reset();
     resetDetails.open = false;
-    managementStatus.textContent = "초기화했습니다. 삭제된 투표 " + removed + "건.";
     await loadResults();
-  } catch {
-    if (token === adminToken) managementStatus.textContent = "초기화 결과를 확인하지 못했습니다. 새로고침해 확인해 주세요.";
+    if (token !== adminToken) return;
+    resetStatus.textContent = "초기화 완료 · 삭제된 투표 " + removed + "건";
+    resetStatus.focus();
+  } catch (error) {
+    if (token !== adminToken) return;
+    resetStatus.textContent = [401, 403].includes(error.status) || error.code === "42501"
+      ? "관리자 권한을 확인할 수 없습니다. 로그아웃한 뒤 다시 로그인해 주세요."
+      : "초기화 결과를 확인하지 못했습니다. 결과를 새로고침해 확인해 주세요.";
+    resetStatus.focus();
   } finally {
     button.disabled = refresh.disabled = false;
   }
