@@ -7,6 +7,9 @@ const voteStatus = document.querySelector("#vote-status");
 const adminForm = document.querySelector("#admin-form");
 const adminStatus = document.querySelector("#admin-status");
 const results = document.querySelector("#vote-results");
+const management = document.querySelector("#ballot-management");
+const managementStatus = document.querySelector("#ballot-management-status");
+const adminBallots = document.querySelector("#admin-ballots");
 const signOut = document.querySelector("#sign-out");
 const refresh = document.querySelector("#refresh-results");
 const first = ballot.elements.first;
@@ -141,6 +144,9 @@ function clearAdmin(message) {
   adminForm.hidden = false;
   refresh.hidden = signOut.hidden = true;
   results.replaceChildren();
+  management.hidden = true;
+  adminBallots.replaceChildren();
+  managementStatus.textContent = "";
   adminStatus.textContent = message;
 }
 
@@ -148,13 +154,22 @@ async function loadResults() {
   const token = adminToken;
   refresh.disabled = true;
   try {
-    const rows = await rpc("admin_icon_vote_results", {}, token);
+    const [rows, ballots] = await Promise.all([
+      rpc("admin_icon_vote_results", {}, token),
+      rpc("admin_icon_ballots", {}, token)
+    ]);
     if (token !== adminToken) return;
-    results.replaceChildren();
-    for (const row of rows) {
+    const heading = document.createElement("h2");
+    heading.textContent = "전체 득표 순위";
+    results.replaceChildren(heading);
+    const frequencies = new Map();
+    for (const row of rows) frequencies.set(row.votes, (frequencies.get(row.votes) ?? 0) + 1);
+    let rank = 1;
+    for (const [index, row] of rows.entries()) {
+      if (index && row.votes !== rows[index - 1].votes) rank = index + 1;
       const group = document.createElement("details");
       const summary = document.createElement("summary");
-      summary.textContent = row.label + " · " + row.votes + "표";
+      summary.textContent = (frequencies.get(row.votes) > 1 ? "공동 " : "") + rank + "위 · " + row.label + " · " + row.votes + "표";
       group.append(summary);
       if (row.notes.length) {
         const list = document.createElement("ul");
@@ -167,12 +182,86 @@ async function loadResults() {
       }
       results.append(group);
     }
-    adminStatus.textContent = "총 참여 " + rows.reduce((sum, row) => sum + Number(row.votes), 0) / 2 + "명";
+    adminStatus.textContent = "총 참여 " + ballots.length + "명";
+    adminBallots.replaceChildren(...ballots.map(ballot => ballotEditor(ballot, rows)));
+    if (!ballots.length) adminBallots.textContent = "아직 제출된 투표가 없습니다.";
+    management.hidden = false;
   } catch {
     if (token === adminToken) clearAdmin("관리 권한을 확인할 수 없습니다. 다시 로그인해 주세요.");
   } finally {
     refresh.disabled = false;
   }
+}
+
+function ballotEditor(record, candidates) {
+  const group = document.createElement("details");
+  const summary = document.createElement("summary");
+  const names = new Map(candidates.map(candidate => [candidate.id, candidate.label]));
+  summary.textContent = names.get(record.first_id) + " · " + names.get(record.second_id);
+  const form = document.createElement("form");
+  for (const [slot, caption] of [["first", "첫 번째 선택"], ["second", "두 번째 선택"]]) {
+    const choice = document.createElement("select");
+    choice.name = slot;
+    for (const candidate of candidates) choice.add(new Option(candidate.label, candidate.id));
+    choice.value = record[slot + "_id"];
+    const note = document.createElement("textarea");
+    note.name = slot + "Note";
+    note.rows = 2;
+    note.maxLength = 100;
+    note.required = true;
+    const choiceLabel = document.createElement("label");
+    choiceLabel.append(caption, choice);
+    const noteLabel = document.createElement("label");
+    noteLabel.append(caption + " 한마디", note);
+    note.value = record[slot + "_note"];
+    form.append(choiceLabel, noteLabel);
+  }
+  const actions = document.createElement("div");
+  actions.className = "card-actions";
+  const save = document.createElement("button");
+  save.className = "button";
+  save.textContent = "변경 저장";
+  const remove = document.createElement("button");
+  remove.type = "button";
+  remove.className = "secondary";
+  remove.textContent = "투표 삭제";
+  actions.append(save, remove);
+  form.append(actions);
+  group.append(summary, form);
+
+  async function change(deleting) {
+    const data = formValues(form);
+    if (!deleting && (data.first === data.second || !data.firstNote || !data.secondNote)) {
+      managementStatus.textContent = "서로 다른 두 사람을 선택하고 한마디씩 입력해 주세요.";
+      return;
+    }
+    const token = adminToken;
+    if (!token) return;
+    save.disabled = remove.disabled = refresh.disabled = true;
+    try {
+      const changed = await rpc("admin_icon_ballot_change", {
+        p_id: record.ballot_id, p_delete: deleting,
+        p_first: deleting ? null : Number(data.first), p_second: deleting ? null : Number(data.second),
+        p_first_note: deleting ? null : data.firstNote, p_second_note: deleting ? null : data.secondNote
+      }, token);
+      if (!changed) throw new Error("Ballot missing or invalid");
+      if (adminToken !== token) return;
+      managementStatus.textContent = deleting ? "투표를 삭제했습니다." : "변경사항을 저장했습니다.";
+      await loadResults();
+    } catch {
+      if (adminToken === token) managementStatus.textContent = "변경하지 못했습니다. 투표 상태를 확인하고 다시 시도해 주세요.";
+    } finally {
+      save.disabled = remove.disabled = refresh.disabled = false;
+    }
+  }
+  form.addEventListener("submit", event => {
+    event.preventDefault();
+    change(false);
+  });
+  remove.addEventListener("click", () => {
+    if (window.confirm("이 제출 건의 두 표와 한마디를 모두 삭제할까요? 삭제한 사번은 다시 투표할 수 있습니다.")) change(true);
+  });
+  return group;
 }
 
 adminForm.addEventListener("submit", async event => {

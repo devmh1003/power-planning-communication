@@ -183,3 +183,8 @@ footer { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wr
 #vote-results details { margin-block: 9px; padding: 12px; border: 1px solid var(--line); }
 #vote-results summary { cursor: pointer; font-weight: 750; }
 #vote-results li { overflow-wrap: anywhere; white-space: pre-wrap; }
+
+#ballot-management { margin-top: 29px; padding-top: 20px; border-top: 1px solid var(--line); }
+#admin-ballots details { margin-block: 9px; padding: 12px; border: 1px solid var(--line); }
+#admin-ballots summary { cursor: pointer; font-weight: 750; }
+#admin-ballots select { display: block; width: 100%; margin-top: 6px; padding: 8px; font: inherit; }

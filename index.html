@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="전력사업기획실 소통행사 안내와 두 사람에게 전하는 투표">
 <title>전력사업기획실 iCON</title>
-<link rel="stylesheet" href="style.css?v=icon-vote">
+<link rel="stylesheet" href="style.css?v=icon-vote-admin">
 <script defer src="config.js?v=20261106-connected"></script>
-<script defer src="vote.js?v=1"></script>
+<script defer src="vote.js?v=2"></script>
 </head>
 <body>
 <header><div class="wrap bar">
@@ -82,6 +82,12 @@
 </div>
 <p class="status" id="admin-status" role="status"></p>
 <div id="vote-results"></div>
+<section id="ballot-management" hidden aria-labelledby="ballot-management-title">
+<h2 id="ballot-management-title">제출된 투표 관리</h2>
+<p>투표 한 건에는 두 사람에 대한 선택과 한마디가 들어 있습니다.</p>
+<p id="ballot-management-status" class="status" role="status"></p>
+<div id="admin-ballots"></div>
+</section>
 </section>
 </main>
 <footer class="wrap"><span>전력사업기획실 <strong>iCON</strong></span><span class="footer-edition">COMMUNICATION DAY 2026 <b>·</b> <a href="#admin">관리자 모드</a></span></footer>
