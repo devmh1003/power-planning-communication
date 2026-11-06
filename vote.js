@@ -160,7 +160,7 @@ function clearAdmin(message) {
   adminStatus.textContent = message;
 }
 
-async function loadResults() {
+async function loadResults({ afterReset = false } = {}) {
   const token = adminToken;
   refresh.disabled = true;
   try {
@@ -197,8 +197,20 @@ async function loadResults() {
     if (!ballots.length) adminBallots.textContent = "아직 제출된 투표가 없습니다.";
     management.hidden = false;
     resetDetails.hidden = false;
-  } catch {
-    if (token === adminToken) clearAdmin("관리 권한을 확인할 수 없습니다. 다시 로그인해 주세요.");
+  } catch (error) {
+    if (token !== adminToken) return;
+    const unauthorized = [401, 403].includes(error.status) || error.code === "42501";
+    if (unauthorized && !afterReset) {
+      clearAdmin("관리 권한을 확인할 수 없습니다. 다시 로그인해 주세요.");
+    } else {
+      results.replaceChildren();
+      adminBallots.replaceChildren();
+      management.hidden = true;
+      resetDetails.hidden = true;
+      adminStatus.textContent = unauthorized
+        ? "관리자 세션을 확인할 수 없습니다. 로그아웃한 뒤 다시 로그인해 주세요."
+        : "결과를 불러오지 못했습니다. 결과 새로고침을 눌러 주세요.";
+    }
   } finally {
     refresh.disabled = false;
   }
@@ -293,10 +305,9 @@ resetForm.addEventListener("submit", async event => {
     if (token !== adminToken) return;
     resetForm.reset();
     resetDetails.open = false;
-    await loadResults();
-    if (token !== adminToken) return;
     resetStatus.textContent = "초기화 완료 · 삭제된 투표 " + removed + "건";
     resetStatus.focus();
+    await loadResults({ afterReset: true });
   } catch (error) {
     if (token !== adminToken) return;
     resetStatus.textContent = [401, 403].includes(error.status) || error.code === "42501"
@@ -328,7 +339,7 @@ adminForm.addEventListener("submit", async event => {
     button.disabled = false;
   }
 });
-refresh.addEventListener("click", loadResults);
+refresh.addEventListener("click", () => loadResults());
 signOut.addEventListener("click", () => clearAdmin("로그아웃했습니다."));
 window.addEventListener("hashchange", showPage);
 showPage();
