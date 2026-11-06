@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="전력사업기획실 소통행사 안내와 마음의 편지 공개 게시판">
 <title>전력사업기획실 iCON</title>
-<link rel="stylesheet" href="style.css?v=icon-gallery">
+<link rel="stylesheet" href="style.css?v=icon-letter-grid">
 <script defer src="config.js?v=20261106-connected"></script>
-<script defer src="app.js?v=20261106-notes"></script>
+<script defer src="app.js?v=icon-letter-grid"></script>
 </head>
 <body>
 <header><div class="wrap bar">
@@ -64,7 +64,12 @@
 <section id="board" data-page hidden>
 <div class="panel board-top"><div class="kicker">LETTER BOARD</div><h1 tabindex="-1">공개 게시판</h1><p>동료에게 전한 마음의 편지를 최신순으로 읽을 수 있습니다. 내가 쓴 편지는 작성한 브라우저에서 수정하거나 삭제할 수 있습니다.</p><a class="button" href="#write">편지 쓰기 <span aria-hidden="true">→</span></a></div>
 <p id="board-status" class="status" role="status"></p>
-<div id="letters" class="letters"></div><button id="more" class="secondary" hidden>이전 편지 더 보기</button>
+<div id="letters" class="letters"></div>
+<div class="board-pagination" role="group" aria-label="공개 게시판 페이지">
+<button id="previous" class="secondary" hidden>← 최신 편지</button>
+<span id="board-page" hidden></span>
+<button id="more" class="secondary" hidden>이전 편지 →</button>
+</div>
 </section>
 <section id="admin" class="panel narrow" data-page hidden>
 <div class="kicker">PRIVATE ACCESS</div><h1 tabindex="-1">관리자 모드</h1>

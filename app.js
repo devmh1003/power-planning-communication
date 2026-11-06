@@ -13,11 +13,15 @@ const writeStatus = document.querySelector("#write-status");
 const boardStatus = document.querySelector("#board-status");
 const letters = document.querySelector("#letters");
 const more = document.querySelector("#more");
+const previous = document.querySelector("#previous");
+const boardPage = document.querySelector("#board-page");
 const pages = ["home", "write", "board", "admin"];
 const unavailable = "공개 게시판 연결이 준비 중입니다.";
 const demoLetters = [];
 const pageSize = 20;
-let cursor;
+const boardPageSize = 9;
+let boardCursors = [null];
+let boardIndex = 0;
 let boardVersion = 0;
 let pending;
 let justPosted = false;
@@ -113,9 +117,10 @@ function letterCard(letter, admin = false) {
   return card;
 }
 
-async function loadLetters() {
+async function loadLetters(index = 0) {
   const version = boardVersion;
-  more.disabled = true;
+  const cursor = boardCursors[index];
+  more.disabled = previous.disabled = true;
   if (!configured && !demo) {
     boardStatus.textContent = unavailable;
     return;
@@ -125,29 +130,37 @@ async function loadLetters() {
     const query = new URLSearchParams({
       select: "id,recipient,title,body",
       order: "id.desc",
-      limit: pageSize + 1
+      limit: boardPageSize + 1
     });
     if (cursor) query.set("id", "lt." + cursor);
     const rows = demo
-      ? demoLetters.filter(letter => !cursor || letter.id < cursor).slice(0, pageSize + 1)
+      ? demoLetters.filter(letter => !cursor || letter.id < cursor).slice(0, boardPageSize + 1)
       : await (await api("event_letters?" + query)).json();
     if (version !== boardVersion) return;
 
-    const page = rows.slice(0, pageSize);
-    letters.append(...page.map(letter => letterCard(letter)));
-    cursor = page.at(-1)?.id ?? cursor;
-    more.textContent = "이전 편지 더 보기";
-    more.hidden = rows.length <= pageSize;
-    boardStatus.textContent = !cursor ? "아직 올라온 편지가 없습니다."
+    const page = rows.slice(0, boardPageSize);
+    letters.replaceChildren(...page.map(letter => letterCard(letter)));
+    boardIndex = index;
+    boardCursors.length = index + 1;
+    if (rows.length > boardPageSize) boardCursors.push(page.at(-1).id);
+    previous.hidden = index === 0;
+    more.hidden = rows.length <= boardPageSize;
+    more.textContent = "이전 편지 →";
+    boardPage.hidden = previous.hidden && more.hidden;
+    boardPage.textContent = (index + 1) + " 페이지";
+    boardStatus.textContent = !page.length
+      ? index ? "이 페이지에 남아 있는 편지가 없습니다." : "아직 올라온 편지가 없습니다."
       : justPosted ? "편지가 게시됐습니다." : "";
     justPosted = false;
   } catch {
     if (version !== boardVersion) return;
     boardStatus.textContent = "편지를 불러오지 못했습니다.";
-    more.textContent = "다시 불러오기";
-    more.hidden = false;
+    if (!letters.children.length && index === 0) {
+      more.textContent = "다시 불러오기";
+      more.hidden = false;
+    }
   } finally {
-    if (version === boardVersion) more.disabled = false;
+    if (version === boardVersion) more.disabled = previous.disabled = false;
   }
 }
 
@@ -168,8 +181,9 @@ function showPage(focus) {
   boardVersion += 1;
   if (current === "board") {
     letters.replaceChildren();
-    cursor = undefined;
-    more.hidden = true;
+    boardCursors = [null];
+    boardIndex = 0;
+    more.hidden = previous.hidden = boardPage.hidden = true;
     loadLetters();
   }
   if (current === "admin" && adminToken) refreshAdmin();
@@ -357,6 +371,9 @@ signOut.addEventListener("click", () => {
   if (token) api("logout", { method: "POST" }, token, "/auth/v1/").catch(() => {});
 });
 adminMore.addEventListener("click", loadAdmin);
-more.addEventListener("click", loadLetters);
+more.addEventListener("click", () => loadLetters(
+  more.textContent === "다시 불러오기" ? 0 : boardIndex + 1
+));
+previous.addEventListener("click", () => loadLetters(boardIndex - 1));
 window.addEventListener("hashchange", () => showPage(true));
 showPage(false);

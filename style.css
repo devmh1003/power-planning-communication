@@ -107,3 +107,56 @@ footer { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wr
 }
 
 .venue-address { display: block; margin-top: 4px; color: var(--muted); font-size: .81rem; font-weight: 500; }
+
+/* Public correspondence gallery */
+#board .letters {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+  align-items: start;
+}
+#board .letter {
+  --note-paper: #fffaf0;
+  --note-ink: #42313e;
+  --note-rule: #8d5d5140;
+  min-height: 240px;
+  padding: 27px 24px 24px;
+  border: 1px solid #e4d6c9;
+  border-radius: 1px 1px 13px 1px;
+  background: var(--note-paper);
+  box-shadow: 2px 5px 10px #3d293313;
+}
+#board .letter:nth-child(3n+2) { --note-paper: #f8f3fb; --note-rule: #75598d45; }
+#board .letter:nth-child(3n+3) { --note-paper: #f9f3ed; --note-rule: #8c584744; }
+#board .letter::before {
+  top: 16px;
+  right: 17px;
+  left: auto;
+  width: 16px;
+  height: 12px;
+  border: 1px solid var(--note-rule);
+  background: linear-gradient(35deg, transparent 48%, var(--note-rule) 50%, transparent 53%) left top / 51% 70% no-repeat,
+              linear-gradient(-35deg, transparent 48%, var(--note-rule) 50%, transparent 53%) right top / 51% 70% no-repeat;
+  transform: none;
+}
+#board .letter .meta {
+  padding: 0 20px 11px 0;
+  border-bottom: 1px solid var(--note-rule);
+  letter-spacing: .045em;
+}
+#board .letter h2 {
+  margin-top: 15px;
+  color: var(--note-ink);
+  font-size: clamp(1.4rem, 2.4vw, 1.8rem);
+  line-height: 1.27;
+}
+#board .letter .body {
+  font-family: "Noto Serif KR", "AppleMyungjo", "Batang", "Nanum Myeongjo", serif;
+  font-size: 1rem;
+  line-height: 1.95;
+  color: var(--note-ink);
+  background-image: repeating-linear-gradient(to bottom, transparent 0, transparent calc(1.95em - 1px), var(--note-rule) calc(1.95em - 1px), var(--note-rule) 1.95em);
+}
+.board-pagination { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+#board-page { color: var(--muted); font-size: .85rem; }
+@media (max-width: 760px) { #board .letters { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 510px) { #board .letters { grid-template-columns: 1fr; } }
