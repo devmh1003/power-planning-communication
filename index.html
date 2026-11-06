@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="전력사업기획실 소통행사 안내와 마음의 편지 공개 게시판">
 <title>소통행사 | 전력사업기획실</title>
-<link rel="stylesheet" href="style.css?v=20261106">
+<link rel="stylesheet" href="style.css?v=20261106-notes">
 <script defer src="config.js"></script>
-<script defer src="app.js"></script>
+<script defer src="app.js?v=20261106-notes"></script>
 </head>
 <body>
 <header><div class="wrap bar">
@@ -46,11 +46,34 @@
 </form>
 </section>
 <section id="board" data-page hidden>
-<div class="panel board-top"><div class="kicker">LETTER BOARD</div><h1 tabindex="-1">공개 게시판</h1><p>동료에게 전한 마음의 편지를 최신순으로 읽을 수 있습니다.</p><a class="button" href="#write">편지 쓰기 <span aria-hidden="true">→</span></a></div>
+<div class="panel board-top"><div class="kicker">LETTER BOARD</div><h1 tabindex="-1">공개 게시판</h1><p>동료에게 전한 마음의 편지를 최신순으로 읽을 수 있습니다. 내가 쓴 편지는 작성한 브라우저에서 수정하거나 삭제할 수 있습니다.</p><a class="button" href="#write">편지 쓰기 <span aria-hidden="true">→</span></a></div>
 <p id="board-status" class="status" role="status"></p>
 <div id="letters" class="letters"></div><button id="more" class="secondary" hidden>이전 편지 더 보기</button>
 </section>
+<section id="admin" class="panel narrow" data-page hidden>
+<div class="kicker">PRIVATE ACCESS</div><h1 tabindex="-1">관리자 모드</h1>
+<p>관리자 계정으로 로그인하면 전체 편지와 작성자 이름을 확인하고 수정하거나 삭제할 수 있습니다.</p>
+<form id="admin-form">
+<label>관리자 이메일<input name="email" type="email" autocomplete="username" required></label>
+<label>비밀번호<input name="password" type="password" autocomplete="current-password" required></label>
+<button class="button">관리자 로그인</button>
+</form>
+<button id="sign-out" class="secondary" hidden>로그아웃</button>
+<p class="status" id="admin-status" role="status"></p>
+<div id="admin-letters" class="letters"></div>
+<button id="admin-more" class="secondary" hidden>이전 편지 더 보기</button>
+</section>
+<dialog id="edit-dialog" aria-labelledby="edit-title">
+<form id="edit-form">
+<div class="kicker">EDIT A LETTER</div><h2 id="edit-title">편지 수정</h2>
+<label>받는 사람 이름<input name="recipient" required maxlength="40"></label>
+<label>제목<input name="title" required maxlength="80"></label>
+<label>편지 내용<textarea name="body" rows="6" required maxlength="2000"></textarea></label>
+<div class="card-actions"><button class="button">변경 저장</button><button id="edit-cancel" class="secondary" type="button">취소</button></div>
+<p class="status" id="edit-status" role="status"></p>
+</form>
+</dialog>
 </main>
-<footer class="wrap"><span>전력사업기획실 <b>·</b> 소통행사</span><span class="footer-edition">COMMUNICATION DAY 2026</span></footer>
+<footer class="wrap"><span>전력사업기획실 <b>·</b> 소통행사</span><span class="footer-edition">COMMUNICATION DAY 2026 <b>·</b> <a href="#admin">관리자 모드</a></span></footer>
 </body>
 </html>

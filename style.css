@@ -95,3 +95,47 @@ footer b { margin-inline: 5px; }
   .edition { right: 23px; bottom: 22px; }
   .event dl div + div { padding-left: 0; border-left: 0; }
 }
+
+/* The board arranges notes in a gallery-style grid. */
+.board-top { background: #f9f8ee; border-top: 3px solid #9f8a58; }
+#board .letters { grid-template-columns: repeat(auto-fit, minmax(min(100%, 265px), 1fr)); gap: 22px; margin-block: 26px; }
+.letter {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 0;
+  border-radius: 2px 2px 16px 2px;
+  min-height: 210px;
+  padding: 30px 24px 22px;
+  background: linear-gradient(160deg,#fff8dc,#f3e5b4);
+  box-shadow: 0 8px 14px #3f3d1d15;
+}
+.letter:nth-child(3n+2) { background: linear-gradient(160deg,#f1f6e6,#dde9ce); }
+.letter:nth-child(3n+3) { background: linear-gradient(160deg,#fff2e7,#f2dfd0); }
+.letter::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: calc(50% - 29px);
+  width: 58px;
+  height: 15px;
+  background: #ae936b35;
+  transform: rotate(-5deg);
+  pointer-events: none;
+}
+.letter h2 { font-family: "Noto Serif KR", "Batang", "AppleMyungjo", Georgia, serif; }
+.letter .meta { order: -1; margin: 0; font-size: .78rem; font-weight: 750; letter-spacing: .03em; }
+.letter .body { margin: 9px 0 14px; }
+.card-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }
+.letter .secondary { background: #ffffff69; min-height: 34px; padding: 6px 11px; font-size: .82rem; }
+.footer-edition a { text-decoration: underline; text-underline-offset: 3px; }
+dialog {
+  width: min(540px, calc(100% - 32px));
+  max-height: calc(100% - 32px);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 26px;
+  background: var(--paper);
+  color: var(--ink);
+}
+dialog::backdrop { background: #142f2699; }
